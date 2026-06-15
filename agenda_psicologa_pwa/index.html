@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#8b6f99" />
+  <title>Agenda da Psicóloga</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">ψ</div>
+        <div>
+          <h1>Agenda Psi</h1>
+          <p>Consultas offline</p>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <button class="nav-btn active" data-screen="dashboard">Início</button>
+        <button class="nav-btn" data-screen="month">Calendário</button>
+        <button class="nav-btn" data-screen="week">Semana</button>
+        <button class="nav-btn" data-screen="patients">Pacientes</button>
+        <button class="nav-btn" data-screen="finance">Financeiro</button>
+        <button class="nav-btn" data-screen="settings">Configurações</button>
+      </nav>
+
+      <div class="sidebar-card">
+        <span>Próxima consulta</span>
+        <strong id="nextMini">Nenhuma hoje</strong>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <p id="todayText" class="muted"></p>
+          <h2 id="greeting">Bom dia</h2>
+        </div>
+        <div class="top-actions">
+          <button id="themeBtn" class="ghost-btn">Tema</button>
+          <button id="installBtn" class="primary-btn hidden">Instalar app</button>
+          <button id="newAppointmentBtn" class="primary-btn">+ Consulta</button>
+        </div>
+      </header>
+
+      <section id="dashboard" class="screen active">
+        <div class="hero-card">
+          <div>
+            <p class="muted">Resumo de hoje</p>
+            <h3 id="dashboardTitle">Hoje</h3>
+            <p id="nextAppointmentText">Nenhuma consulta marcada para hoje.</p>
+          </div>
+          <div class="hero-number">
+            <span id="todayCount">0</span>
+            <small>consultas</small>
+          </div>
+        </div>
+
+        <div class="grid two">
+          <div class="card">
+            <div class="card-head">
+              <h3>Consultas de hoje</h3>
+              <button class="small-btn" id="printTodayBtn">Imprimir</button>
+            </div>
+            <div id="todayList" class="appointment-list empty-state">Nenhuma consulta hoje.</div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <h3>Próximas consultas</h3>
+              <button class="small-btn" id="exportPdfBtn">Salvar/Imprimir PDF</button>
+            </div>
+            <div id="upcomingList" class="appointment-list empty-state">Nenhuma consulta futura.</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="month" class="screen">
+        <div class="card">
+          <div class="calendar-head">
+            <button id="prevMonth" class="ghost-btn">‹</button>
+            <h3 id="monthTitle"></h3>
+            <button id="nextMonth" class="ghost-btn">›</button>
+          </div>
+          <div class="week-days">
+            <span>Dom</span><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span>
+          </div>
+          <div id="calendarGrid" class="calendar-grid"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <h3 id="selectedDateTitle">Consultas do dia</h3>
+            <button id="newOnSelectedDate" class="small-btn">Adicionar neste dia</button>
+          </div>
+          <div id="selectedDateList" class="appointment-list empty-state"></div>
+        </div>
+      </section>
+
+      <section id="week" class="screen">
+        <div class="card">
+          <div class="calendar-head">
+            <button id="prevWeek" class="ghost-btn">‹ Semana anterior</button>
+            <h3 id="weekTitle"></h3>
+            <button id="nextWeek" class="ghost-btn">Próxima semana ›</button>
+          </div>
+          <div id="weekGrid" class="week-grid"></div>
+        </div>
+      </section>
+
+      <section id="patients" class="screen">
+        <div class="card">
+          <div class="card-head wrap">
+            <div>
+              <h3>Busca por paciente</h3>
+              <p class="muted">Digite parte do nome para encontrar consultas.</p>
+            </div>
+            <input id="searchInput" class="input search" placeholder="Buscar paciente..." />
+          </div>
+          <div id="searchResults" class="appointment-list empty-state">Digite um nome para buscar.</div>
+        </div>
+      </section>
+
+      <section id="finance" class="screen">
+        <div class="grid three">
+          <div class="stat-card"><span>Mês atual</span><strong id="monthTotal">R$ 0,00</strong></div>
+          <div class="stat-card"><span>Realizadas</span><strong id="doneCount">0</strong></div>
+          <div class="stat-card"><span>Pendentes</span><strong id="pendingCount">0</strong></div>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <h3>Resumo financeiro</h3>
+            <button class="small-btn" id="printFinanceBtn">Imprimir</button>
+          </div>
+          <p class="muted">O valor é opcional. Só será somado quando a consulta estiver como realizada.</p>
+          <div id="financeList" class="appointment-list empty-state"></div>
+        </div>
+      </section>
+
+      <section id="settings" class="screen">
+        <div class="grid two">
+          <div class="card">
+            <h3>Perfil da psicóloga</h3>
+            <label>Nome exibido</label>
+            <input id="doctorName" class="input" placeholder="Ex: Dra. Ana" />
+            <label>Frase/descrição</label>
+            <input id="doctorSubtitle" class="input" placeholder="Ex: Psicóloga Clínica" />
+            <button id="saveProfileBtn" class="primary-btn full">Salvar perfil</button>
+          </div>
+
+          <div class="card">
+            <h3>Backup offline</h3>
+            <p class="muted">Exporte um arquivo de segurança e importe em outro aparelho quando precisar.</p>
+            <button id="backupBtn" class="primary-btn full">Baixar backup</button>
+            <label class="file-label">
+              Importar backup
+              <input id="importInput" type="file" accept="application/json" />
+            </label>
+            <button id="clearAllBtn" class="danger-btn full">Apagar todos os dados</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="modal" class="modal hidden">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3 id="modalTitle">Nova consulta</h3>
+        <button id="closeModal" class="icon-btn">×</button>
+      </div>
+      <form id="appointmentForm">
+        <input type="hidden" id="appointmentId" />
+        <label>Nome do paciente</label>
+        <input id="patientName" class="input" required placeholder="Ex: Maria" />
+        <div class="form-row">
+          <div>
+            <label>Data</label>
+            <input id="appointmentDate" class="input" type="date" required />
+          </div>
+          <div>
+            <label>Horário</label>
+            <input id="appointmentTime" class="input" type="time" required />
+          </div>
+        </div>
+        <div class="form-row">
+          <div>
+            <label>Status</label>
+            <select id="appointmentStatus" class="input">
+              <option value="marcada">Marcada</option>
+              <option value="realizada">Realizada</option>
+              <option value="cancelada">Cancelada</option>
+              <option value="remarcada">Remarcada</option>
+            </select>
+          </div>
+          <div>
+            <label>Valor opcional</label>
+            <input id="appointmentValue" class="input" type="number" step="0.01" min="0" placeholder="0,00" />
+          </div>
+        </div>
+        <label>Observação curta</label>
+        <textarea id="appointmentNote" class="input" rows="3" placeholder="Opcional"></textarea>
+        <button class="primary-btn full" type="submit">Salvar consulta</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
